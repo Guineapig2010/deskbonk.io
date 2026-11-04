@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Desktop Bonk</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div id="app">
+  <canvas id="game"></canvas>
+  <div id="toolbar" class="ia">
+    <div id="drag" title="Drag to move the arena">⠿</div>
+    <span id="title">DESKTOP&nbsp;BONK</span>
+    <button id="tbQuick" title="Quick Match (Enter)">▶ Quick</button>
+    <button id="tbMenu" title="Menu (Esc)">☰</button>
+    <button id="tbFocus" title="Give keyboard focus to the game">⌨ Focus</button>
+    <span class="sizes"><button data-size="small" title="Small arena">S</button><button data-size="medium" title="Medium arena">M</button><button data-size="large" title="Large arena">L</button></span>
+    <button id="tbMin" title="Minimize to a floating launcher">–</button>
+    <button id="tbHide" title="Hide (global shortcut)">×</button>
+  </div>
+  <div id="hud">
+    <div id="scores"></div>
+    <div id="mapName"></div>
+    <div id="center"></div>
+    <div id="heavy" title="Heavy effectiveness"><div id="heavyFill"></div><span>X</span></div>
+    <div id="hint"></div>
+    <div id="focusHint" class="ia hidden">Keyboard is with another app — <b>click here</b> to play</div>
+  </div>
+  <div id="panel" class="ia hidden"></div>
+  <div id="grip" class="ia" title="Drag to resize"></div>
+</div>
+<script src="vendor/planck.min.js"></script>
+<script src="js/util.js"></script>
+<script src="js/config.js"></script>
+<script src="js/native.js"></script>
+<script src="js/world.js"></script>
+<script src="js/sim.js"></script>
+<script src="js/maps.js"></script>
+<script src="js/ai.js"></script>
+<script src="js/match.js"></script>
+<script src="js/render.js"></script>
+<script src="js/audio.js"></script>
+<script src="js/editor.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>

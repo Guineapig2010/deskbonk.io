@@ -5,7 +5,7 @@
   const DB = root.DB;
   const U = DB.util;
 
-  const TYPE_COLORS = { static: '#d7deee', kinematic: '#8fd3ff', dynamic: '#ffc978' };
+  const TYPE_COLORS = { static: '#a3aec6', kinematic: '#6fc3f5', dynamic: '#f5b75a' };
 
   class Renderer {
     constructor(canvas) {
