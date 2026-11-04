@@ -108,7 +108,7 @@
       const b = m.ball || { x: m.view.w / 2, y: m.view.h / 2, r: 1.3 };
       const body = this.world.createBody({ type: 'dynamic', position: v2(b.x, b.y), bullet: true, linearDamping: 0.25, angularDamping: 0.4 });
       body.createFixture({
-        shape: planck.Circle(b.r), density: 0.35 / (Math.PI * b.r * b.r) * 1.0, friction: 0.4, restitution: 0.55,
+        shape: planck.Circle(b.r), density: 0.6 / (Math.PI * b.r * b.r), friction: 0.4, restitution: 0.55,
         filterCategoryBits: C.CAT_BALL, filterMaskBits: 0xffff,
       }).setUserData({ kind: 'ball' });
       body.setUserData({ kind: 'ball' });
@@ -413,8 +413,8 @@
         const bp = this.ball.body.getPosition(), pp = p.body.getPosition();
         const dx = bp.x - pp.x, dy = bp.y - pp.y, d = Math.hypot(dx, dy);
         if (d < p.radius + this.ball.r + 1.1) {
-          const s = 7.5 / Math.max(0.01, d);
-          this.ball.body.applyLinearImpulse(v2(dx * s, dy * s - 1.2), this.ball.body.getWorldCenter(), true);
+          const s = 7 / Math.max(0.01, d);
+          this.ball.body.applyLinearImpulse(v2(dx * s, dy * s - 0.6), this.ball.body.getWorldCenter(), true);
           p.body.applyLinearImpulse(v2(-dx * s * 0.2, -dy * s * 0.2), p.body.getWorldCenter(), true);
           this.events.push({ type: 'kick', x: bp.x, y: bp.y });
         }

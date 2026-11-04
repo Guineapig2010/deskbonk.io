@@ -1,0 +1,28 @@
+<!doctype html>
+<!-- Simulates the macOS overlay in a browser: a mock Safari page with the transparent game
+     arena floating in the bottom-right corner (the game page has a transparent background). -->
+<html><head><meta charset="utf-8"><title>Overlay preview</title>
+<style>
+  body { margin: 0; font: 15px -apple-system, Helvetica, Arial, sans-serif; background: #fff; color: #222; height: 100vh; overflow: hidden; }
+  .bar { height: 52px; background: #ececec; border-bottom: 1px solid #d0d0d0; display: flex; align-items: center; padding: 0 14px; gap: 8px; }
+  .dot { width: 12px; height: 12px; border-radius: 50%; display: inline-block; }
+  .url { flex: 1; margin: 0 120px; height: 28px; border-radius: 7px; background: #fff; border: 1px solid #ddd; color: #666; font-size: 13px; display: flex; align-items: center; justify-content: center; }
+  .page { max-width: 760px; margin: 40px auto; }
+  .page h1 { font-weight: 600; font-size: 28px; }
+  .msg { background: #f4f4f4; border-radius: 18px; padding: 12px 18px; margin: 12px 0; width: fit-content; max-width: 520px; }
+  .line { height: 10px; background: #e6e6e6; border-radius: 5px; margin: 10px 0; }
+  .input { position: absolute; bottom: 30px; left: 50%; transform: translateX(-50%); width: 640px; height: 52px; border: 1px solid #ddd; border-radius: 26px; box-shadow: 0 2px 10px rgba(0,0,0,.06); color: #999; display: flex; align-items: center; padding-left: 22px; }
+  iframe { position: fixed; right: 14px; bottom: 14px; border: 0; background: transparent; }
+</style></head>
+<body>
+  <div class="bar"><span class="dot" style="background:#ff5f57"></span><span class="dot" style="background:#febc2e"></span><span class="dot" style="background:#28c840"></span><div class="url">chat.example.com</div></div>
+  <div class="page">
+    <h1>What can I help with?</h1>
+    <div class="msg">Can you explain how momentum works in a collision?</div>
+    <div class="line" style="width:92%"></div><div class="line" style="width:86%"></div><div class="line" style="width:74%"></div>
+    <div class="line" style="width:90%"></div><div class="line" style="width:60%"></div>
+  </div>
+  <div class="input">Ask anything</div>
+  <iframe id="game" allowtransparency="true" width="560" height="400"></iframe>
+  <script>document.getElementById('game').src = '../Sources/DesktopBonk/Web/index.html?nopause' + (location.search ? '&' + location.search.slice(1) : '');</script>
+</body></html>

@@ -773,7 +773,7 @@
         // get behind the ball relative to the opponent goal, then drive through it
         const behind = (pos.x - ballX) * dirGoal < -0.5;
         if (behind) { tx = ballX + dirGoal * 2; ty = ballY; }
-        else { tx = ballX - dirGoal * 3.2; ty = ballY - 2.5; }
+        else { tx = ballX - dirGoal * 3.2; ty = ballY; }
       } else {
         tx = (ballX + myGoal.x) / 2; ty = Math.min(ballY, 33);
       }
@@ -781,7 +781,7 @@
       const kp = 0.8, kd = 0.35;
       const ux = ex * kp - vel.x * kd, uy = ey * kp - vel.y * kd;
       inp.right = ux > 0.4; inp.left = ux < -0.4;
-      inp.up = uy < -1.2; inp.down = uy > 2.5;
+      inp.up = ballY < pos.y - 2.5 && uy < -1.2; inp.down = uy > 2.5;
       const dball = Math.hypot(bp.x - pos.x, bp.y - pos.y);
       if (dball < 3.2 && (bp.x - pos.x) * dirGoal > 0 && me.cooldown <= 0 && this.rng() < 0.25 + this.level * 0.12) inp.special = true;
       inp.heavy = this.level >= 3 && dball < 2.6 && Math.abs(vel.x) > 4 && (bp.x - pos.x) * dirGoal > 0;

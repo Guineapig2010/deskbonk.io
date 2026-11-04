@@ -4,6 +4,8 @@ A small, offline Bonk.io-style physics brawler for macOS. Its arena floats over 
 
 Circular players, force-based arrow-key movement, a heavy mode on **X**, Box2D rigid-body physics (via [planck.js](https://github.com/piqnt/planck.js)), 30 original maps, bots with six difficulty levels and six personalities, Classic, Teams, Arrows, Grapple and Football modes, and a map editor.
 
+![Arena floating over a browser window (browser preview of the overlay)](docs/overlay_preview.png)
+
 > Original game, original assets. It does not connect to, imitate or depend on Bonk.io's servers or accounts, and it copies no Bonk.io maps or art.
 
 ---

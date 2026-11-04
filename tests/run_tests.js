@@ -243,7 +243,7 @@ function botMatch(opts) {
   let heavy = 0; for (const b of m.brains.values()) heavy += b.stats.heavyFrames;
   const botKills = Object.values(m.kills).reduce((a, b) => a + b, 0);
   check(G, 'Bots use heavy mode', heavy > 60, heavy + ' heavy frames');
-  check(G, 'Bots fight and eliminate each other', botKills > 0 && m.history.length > 0, `${botKills} credited KOs, ${m.history.length} rounds`);
+  check(G, 'Bots fight and eliminate each other', botKills >= 2, `${botKills} credited KOs, ${m.history.length} rounds`);
   // targets are spread across opponents
   const targets = new Set(); for (const b of m.brains.values()) if (b.target) targets.add(b.target.id);
   check(G, 'Bots target different opponents (not only one player)', targets.size >= 2, targets.size + ' distinct targets');
