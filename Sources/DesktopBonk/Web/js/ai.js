@@ -120,6 +120,17 @@
 
     // distance (along the sideways axis, both directions) until the ground under (x,y) runs out
     edgeInfo(x, y) {
+      // cached per decision on a 0.5 m grid (edge probes are the most raycast-heavy query)
+      const key = Math.round(x * 2) * 4096 + Math.round(y * 2);
+      const cache = this._edgeCache || (this._edgeCache = new Map());
+      const hit = cache.get(key);
+      if (hit) return hit;
+      const r = this._edgeInfo(x, y);
+      cache.set(key, r);
+      return r;
+    }
+
+    _edgeInfo(x, y) {
       const g0 = this.ground(x, y, 4.5);
       if (!g0) return { grounded: false, plus: 0, minus: 0, body: null, gy: null };
       const offs = [1.5, 3, 4.5, 6.5, 9];
@@ -211,6 +222,14 @@
           const gg = this.ground(x, y, R + 0.25);
           if (gg) { grounded = true; groundN = gg; if (gg.lethal) { out.dead = true; out.deadT = i * dt; break; } }
         }
+        // moving / rotating supports drag the ball along through friction
+        if (grounded && groundN && L.surfAware && !groundN.body.isStatic()) {
+          const sv = groundN.body.getLinearVelocityFromWorldPoint(planck.Vec2(groundN.x, groundN.y));
+          const tx = -groundN.ny, ty = groundN.nx; // surface tangent
+          const rel = (sv.x - vx) * tx + (sv.y - vy) * ty;
+          const k = Math.min(1, 3.5 * dt);
+          vx += rel * tx * k; vy += rel * ty * k;
+        }
         // other players as moving circles: momentum exchange on contact (first contact per opponent)
         const opps = this.opps;
         if (opps && i < n1 + n2) {
@@ -286,6 +305,7 @@
       const pos = me.body.getPosition(), vel = me.body.getLinearVelocity();
       const x = pos.x, y = pos.y;
       this.stats.decisions++;
+      if (this._edgeCache) this._edgeCache.clear();
       const opps = this.perceive(sim);
       for (const o of opps) {
         // is this opponent backed up against someone/something on either side? (chain pushes are weak)
@@ -365,6 +385,8 @@
       const P = this.P, L = this.L;
       const st = this.bstate || (this.bstate = { phase: 'approach', t: 0, lastDist: 99 });
       st.t += L.react / 60;
+      const bail = this.bailout(here, x, y);
+      if (bail) return bail;
       if (!T) {
         const c = this.mapCenter(this.sim);
         return { dx: Math.sign(c[0] - x), dy: 0, w: 4 * P.center, idle: 0 };
@@ -375,7 +397,7 @@
       const sgn = Math.sign(side) || 1;
       const toward = [Math.round(this.sx * sgn), Math.round(this.sy * sgn)];
       const away = [-toward[0], -toward[1]];
-      if (st.runup == null || st.phase === 'recoil') st.runup = 3 + 2.2 * (P.approach < 0.6 ? 1.3 : 1) + (this.level >= 4 ? 0.8 : 0) + this.rng() * 2.5;
+      if (st.runup == null || st.phase === 'recoil') st.runup = 2.4 + 1.4 * (P.approach < 0.6 ? 1.4 : 1) + (this.level >= 4 ? 0.5 : 0) + this.rng() * 2.2;
       const runup = st.runup;
       const myRoomBack = here && here.grounded ? (sgn > 0 ? here.minus : here.plus) : 0;
       const closingOnMe = -((T.vx - vx) * rx + (T.vy - vy) * ry) / (dist || 1); // >0: we approach each other
@@ -389,18 +411,22 @@
         st.phase = 'approach';
         return { dx: toward[0], dy: toward[1], w: 3.5 * P.approach + 1, idle: 0 };
       }
+      // a target close to its own edge (or already airborne) is pressed immediately — no run-up
+      const tRoom = T.edge && T.edge.grounded ? Math.min(T.edge.plus, T.edge.minus) : (T.edge ? 0 : 12);
+      const pressNow = tRoom < 5.5 * (P.aggr > 1.2 ? 1.3 : 1);
+      if (pressNow && st.phase === 'backoff') { st.phase = 'charge'; st.t = 0; }
       switch (st.phase) {
         case 'backoff':
-          if (dist >= runup || myRoomBack < 3 || st.t > 1.4 || closingOnMe > 5) { st.phase = 'charge'; st.t = 0; }
+          if (dist >= runup || myRoomBack < 3 || st.t > 0.9 || closingOnMe > 5) { st.phase = 'charge'; st.t = 0; }
           break;
         case 'charge':
           if (dist < 2.25 || (st.t > 0.4 && dist > st.lastDist + 0.4) || st.t > 2.2) { st.phase = 'recoil'; st.t = 0; }
           break;
         case 'recoil':
-          if (st.t > 0.25 + 0.1 * this.rng()) { st.phase = dist < runup ? 'backoff' : 'charge'; st.t = 0; }
+          if (st.t > 0.12 + 0.12 * this.rng()) { st.phase = dist < runup && !pressNow ? 'backoff' : 'charge'; st.t = 0; }
           break;
         default: // approach
-          if (dist < runup + 1.5) { st.phase = dist < runup * 0.7 && myRoomBack > 3 ? 'backoff' : 'charge'; st.t = 0; }
+          if (dist < runup + 1.5) { st.phase = dist < runup * 0.7 && myRoomBack > 3 && !pressNow ? 'backoff' : 'charge'; st.t = 0; }
       }
       st.lastDist = dist;
       const aggr = P.aggr;
@@ -408,6 +434,29 @@
       if (st.phase === 'backoff') return { dx: away[0], dy: away[1], w: 3 + 1.5 * P.edge, idle: 0 };
       if (st.phase === 'charge') return { dx: toward[0], dy: toward[1], w: 5 + 3 * aggr, idle: -1 };
       return { dx: 0, dy: 0, w: 2, idle: 1 }; // recoil: let the collision play out, regain control
+    }
+
+    // On a support that is rotating toward dangerous steepness, head for the map's safe zones.
+    bailout(here, x, y) {
+      if (!this.L.rotAware || !here || !here.grounded || !here.body || here.body.isStatic()) return null;
+      const safe = this.sim.map.ai && this.sim.map.ai.safe;
+      if (!safe) return null;
+      const w = here.body.getAngularVelocity();
+      if (Math.abs(w) < 0.05) return null;
+      const hn = here.hit;
+      const tilt = Math.acos(U.clamp(-(hn.nx * this.gx + hn.ny * this.gy), -1, 1));
+      // is the surface getting steeper? (sign of the tilt change)
+      const downhill = Math.sign(hn.nx * this.sx + hn.ny * this.sy) || 1;
+      const c = here.body.getWorldCenter();
+      const onFallingSide = Math.sign((x - c.x) * this.sx + (y - c.y) * this.sy) === downhill;
+      if (tilt + Math.abs(w) * 1.2 < 0.42) return null;
+      let best = null, bd = 1e9;
+      for (const p of safe) { const d = Math.abs(p[0] - x); if (d < bd) { bd = d; best = p; } }
+      if (!best) return null;
+      const dir = Math.sign(best[0] - x);
+      // only commit when the low end of the plank points toward that zone
+      if (!onFallingSide) return null;
+      return { dx: dir, dy: 0, w: 9, idle: -1 };
     }
 
     mapCenter(sim) {

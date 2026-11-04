@@ -1,0 +1,7 @@
+{
+  "name": "desktop-bonk-tests",
+  "private": true,
+  "description": "Headless tests for Desktop Bonk. run_tests.js needs only Node; the screenshot tools need Playwright.",
+  "scripts": { "test": "node run_tests.js", "quick": "node run_tests.js quick" },
+  "devDependencies": { "playwright": "^1.47.0" }
+}

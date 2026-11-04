@@ -128,6 +128,15 @@
         const ua = fa.getUserData(), ub = fb.getUserData();
         // ball-to-ball contacts are nearly frictionless (otherwise touching rolling balls jam like gears)
         if (ua && ub && ua.kind === 'player' && ub.kind === 'player') { contact.setFriction(0.04); contact.setRestitution(self.phys.bounceRestitution != null ? self.phys.bounceRestitution : 0.7); }
+        // no wall-clinging: contacts against steep walls are slippery for balls
+        if (ua && ub && (ua.kind === 'player') !== (ub.kind === 'player') && (ua.kind === 'world' || ub.kind === 'world')) {
+          const wm = contact.getWorldManifold(null);
+          if (wm) {
+            const g = self.env.gravityDir;
+            const gl = Math.hypot(g[0], g[1]) || 1;
+            if (Math.abs(wm.normal.x * g[0] + wm.normal.y * g[1]) / gl < 0.45) contact.setFriction(0.03);
+          }
+        }
         // arrows don't hit their shooter for a moment after firing
         for (const [u, o] of [[ua, ub], [ub, ua]]) {
           if (u && u.kind === 'arrow' && o && o.kind === 'player' && o.player === u.arrow.owner && self.time - u.arrow.born < 0.3) contact.setEnabled(false);
@@ -330,7 +339,7 @@
       this.arrows.push(arrow);
       // recoil: equal and opposite momentum
       const m = ab.getMass();
-      p.body.applyLinearImpulse(v2(-dir.x * speed * m * 0.6, -dir.y * speed * m * 0.6), p.body.getWorldCenter(), true);
+      p.body.applyLinearImpulse(v2(-dir.x * speed * m * C.ARROW_RECOIL, -dir.y * speed * m * C.ARROW_RECOIL), p.body.getWorldCenter(), true);
       this.events.push({ type: 'shoot', x: pos.x, y: pos.y, strength: p.charge });
     }
 
@@ -455,8 +464,8 @@
         const B = this.map.bounds, cx = this.map.view.w / 2;
         if (!this.overtime) { this.overtime = true; this.events.push({ type: 'overtime' }); }
         const v = C.OVERTIME_SPEED * (1 / 60);
-        B.left = Math.min(cx - 2.5, B.left + v);
-        B.right = Math.max(cx + 2.5, B.right - v);
+        B.left = Math.min(cx - 1.2, B.left + v);
+        B.right = Math.max(cx + 1.2, B.right - v);
       }
     }
 

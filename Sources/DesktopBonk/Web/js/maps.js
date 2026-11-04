@@ -27,10 +27,10 @@
   // ============================== CLASSIC =====================================
   add({
     id: 'flatline', name: 'Flatline', category: 'Classic',
-    desc: 'One long platform over the void, with two raised blocks near the edges. Pure movement and heavy timing.',
+    desc: 'One long platform over the void with two small raised blocks hanging near the edges — bounce off them for surprise hits. Pure movement and heavy timing.',
     bodies: [
       box(30, 26, 46, 2, { id: 'floor' }),
-      box(10, 23.75, 3, 2.5), box(50, 23.75, 3, 2.5),
+      box(11, 20.6, 3.2, 1.2), box(49, 20.6, 3.2, 1.2),
     ],
     spawns: on(25, [14, 18.5, 23, 27.5, 32.5, 37, 41.5, 46]),
     ai: { tip: 'flat' },
@@ -48,10 +48,10 @@
   });
 
   (function () {
-    const L = slab(6, 19, 30.5, 30, 2.2, { id: 'rampL', friction: 0.5 });
-    const R = slab(29.5, 30, 54, 19, 2.2, { id: 'rampR', friction: 0.5 });
-    const sp = [10, 14, 18, 22].map((x) => [x, slopeY(6, 19, 30.5, 30, x) - 1.5])
-      .concat([38, 42, 46, 50].map((x) => [x, slopeY(29.5, 30, 54, 19, x) - 1.5]));
+    const L = slab(14, 22.5, 30.5, 30, 2.2, { id: 'rampL', friction: 0.5 });
+    const R = slab(29.5, 30, 46, 22.5, 2.2, { id: 'rampR', friction: 0.5 });
+    const sp = [16.5, 19.5, 22.5, 25.5].map((x) => [x, slopeY(14, 22.5, 30.5, 30, x) - 1.5])
+      .concat([34.5, 37.5, 40.5, 43.5].map((x) => [x, slopeY(29.5, 30, 46, 22.5, x) - 1.5]));
     add({
       id: 'valley', name: 'The Valley', category: 'Classic',
       desc: 'Two ramps meet in a deep V. Everyone collides at the bottom — win the clash to launch rivals up and off the far ends.',
@@ -94,14 +94,15 @@
   // ============================ MOVING PLATFORMS ===============================
   add({
     id: 'spinning_plank', name: 'Spinning Plank', category: 'Moving',
-    desc: 'A long motor-driven beam turning around a central hub. Stay near the middle and hop the hub as it flips.',
+    desc: 'A long motor-driven beam slowly turning around a hub. Stay near the middle, ride the hub as it flips, or drop to the catch ledges — the beam tips sweep them.',
     bodies: [
-      { id: 'hub', type: 'static', x: 30, y: 22, shapes: [{ t: 'circle', r: 2.2 }], friction: 0.8 },
-      { id: 'plank', type: 'dynamic', x: 30, y: 22, density: 0.5, friction: 0.7, angularDamping: 0, shapes: [{ t: 'box', w: 42, h: 1.6 }] },
+      { id: 'hub', type: 'static', x: 30, y: 20, shapes: [{ t: 'circle', r: 2.4 }], friction: 0.8 },
+      { id: 'plank', type: 'dynamic', x: 30, y: 20, density: 0.5, friction: 0.7, angularDamping: 0, shapes: [{ t: 'box', w: 42, h: 1.6 }] },
+      box(6.5, 32.6, 12, 1.4), box(53.5, 32.6, 12, 1.4),
     ],
-    joints: [{ t: 'revolute', a: 'hub', b: 'plank', anchor: [30, 22], motor: { speed: 0.26, torque: 9000 } }],
-    spawns: on(21.2, [12, 16, 20, 25, 35, 40, 44, 48]),
-    ai: { rotating: true },
+    joints: [{ t: 'revolute', a: 'hub', b: 'plank', anchor: [30, 20], motor: { speed: 0.2, torque: 9000 } }],
+    spawns: on(19.2, [13, 17, 21, 25.5, 34.5, 39, 43, 47]),
+    ai: { rotating: true, safe: [[6.5, 30.6], [53.5, 30.6]] },
   });
 
   add({
@@ -171,16 +172,17 @@
       const shapes = [{ t: 'circle', r }];
       for (let i = 0; i < teeth; i++) {
         const a = (360 / teeth) * i;
-        shapes.push({ t: 'box', w: 1.6, h: 2.2, x: Math.cos(U.deg(a)) * (r + 0.6), y: Math.sin(U.deg(a)) * (r + 0.6), a: a + 90 });
+        shapes.push({ t: 'box', w: 2.6, h: 1.1, x: Math.cos(U.deg(a)) * (r + 0.2), y: Math.sin(U.deg(a)) * (r + 0.2), a: a + 90 });
       }
       return { id: gid, type: 'kinematic', x, y, spin, friction: 0.9, shapes };
     };
     add({
       id: 'gearbox', name: 'Gearbox', category: 'Moving',
-      desc: 'Three big turning discs with blocks bolted to their rims, each spinning at its own speed and direction.',
-      bodies: [gear('g1', 13, 25, 6, 0.45, 4), gear('g2', 30, 19, 5, -0.7, 3), gear('g3', 47, 25, 6, 0.32, 5)],
+      desc: 'Three big turning discs with blocks bolted to their rims, each spinning at its own speed and direction. Two small catch ledges sit below.',
+      bodies: [gear('g1', 13, 25, 6, 0.3, 4), gear('g2', 30, 19, 5, -0.42, 3), gear('g3', 47, 25, 6, 0.22, 5),
+        box(22, 34, 5.5, 1.2), box(38, 34, 5.5, 1.2)],
       spawns: [[11, 16.5], [15, 16.5], [28.2, 11], [31.8, 11], [45, 16.5], [49, 16.5], [8.5, 18], [51.5, 18]],
-      ai: { rotating: true },
+      ai: { rotating: true, safe: [[22, 32], [38, 32]] },
     });
   })();
 

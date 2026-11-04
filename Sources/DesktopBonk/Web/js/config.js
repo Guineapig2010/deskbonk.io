@@ -16,7 +16,7 @@
       angularDamping: 0.25,
       playerFriction: 0.55,
       playerRestitution: 0.42,
-      bounceRestitution: 0.72, // ball-vs-ball bounce (bonks!)
+      bounceRestitution: 0.85, // ball-vs-ball bounce (bonks!)
       heavyMass: 3.2,         // mass multiplier when heavy at full effectiveness
       heavyMinMass: 1.45,     // multiplier when effectiveness is fully drained
       heavyDrain: 0.34,       // effectiveness lost per second while held (≈3 s to drain)
@@ -51,10 +51,11 @@
     VIEW_H: 40,
     COUNTDOWN: 2.4,         // seconds before a round starts
     ROUND_END_DELAY: 2.6,   // seconds the winner banner shows before next countdown
-    ROUND_TIME_LIMIT: 150,  // a round with no winner after this long is a draw
+    ROUND_TIME_LIMIT: 100,  // a round with no winner after this long is a draw
     OVERTIME_START: 35,     // seconds; then the side boundaries start closing in
     OVERTIME_SPEED: 0.8,    // m/s per side
     MAX_PLAYERS: 8,
+    ARROW_RECOIL: 0.35,     // fraction of the arrow's momentum pushed back into the archer
     // collision categories
     CAT_WORLD: 0x0001,
     CAT_PLAYER: 0x0002,
