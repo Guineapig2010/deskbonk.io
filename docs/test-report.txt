@@ -1,0 +1,52 @@
+PASS  [Gameplay] Left/right arrows accelerate the ball  — v→ 3.81  v← -3.81 m/s after 0.6 s
+PASS  [Gameplay] Up arrow applies upward force (weaker than gravity)  — fall speed none 7.52 / up 2.60
+PASS  [Gameplay] Down arrow applies downward force  — fall speed none 7.52 / down 14.46
+PASS  [Gameplay] Momentum persists after releasing input  — 6.14 → 5.57 m/s over 0.6 s
+PASS  [Gameplay] Ball rolls (angular velocity from friction)  — ω=5.58 rad/s
+PASS  [Gameplay] Heavy multiplies mass  — mass 1.00 → 3.19
+PASS  [Gameplay] Heavy reduces maneuverability  — 0.5 s accel: heavy 1.06 vs normal 3.20 m/s
+PASS  [Gameplay] Holding heavy gradually weakens it  — mass× 3.16 → 1.46 after 3.5 s
+PASS  [Gameplay] Releasing heavy lets it recover  — energy 0.00 → 0.50 (1 s) → 1.00
+PASS  [Gameplay] Heavy behaves consistently (deterministic)  — 2.3273 vs 2.3273
+PASS  [Gameplay] Players bounce off each other  — target 4.36 m/s, attacker after 1.43 m/s
+PASS  [Gameplay] Heavy collisions transfer more momentum  — target speed: normal hit 4.36 / heavy hit 6.26
+PASS  [Gameplay] Heavy target is harder to push  — knock-back normal 4.36 vs heavy 2.51
+PASS  [Gameplay] Leaving the boundary eliminates (all 4 sides)  — left:out right:out bottom:out top:out
+PASS  [Gameplay] Lethal zones eliminate  — gravity chamber hazard pillar
+PASS  [Gameplay] Knock-outs are credited to the last hitter  — killer=P2
+PASS  [Gameplay] Round scoring & match end  — scores {"0":0,"1":2} rounds=2
+PASS  [Gameplay] Rematch resets scores and starts a new round
+PASS  [Maps] 30 maps are defined  — 30 maps
+PASS  [Maps] Map ids are unique
+PASS  [Maps] All 30 maps load  — 30/30
+PASS  [Maps] Every map has 8 valid spawn points  — 30/30
+PASS  [Maps] Moving / rotating mechanisms move  — 30/30
+PASS  [Maps] No physics errors with 8 players  — 30/30
+PASS  [Maps] Rounds complete on every map (8 bots)  — 30/30
+PASS  [Maps] Breakable joints break under heavy load  — 1 joints broke
+PASS  [Maps] Spring platforms compress under mass  — compressed 3.31 m
+PASS  [Maps] Gravity Chamber changes gravity direction  — gravity now -1,0
+PASS  [Maps] Seesaw tilts under player mass  — tilt -24.7°
+PASS  [Maps] Consecutive rounds work  — 8 rounds in 120 s
+PASS  [Bots] Bots navigate simple maps (solo 20 s survival, Skilled)  — flatline:100% twin_islands:100% four_corners:100% narrow_escape:100% tiny_ledges:100% triangles:100% maze:100%
+PASS  [Bots] Bots navigate moving maps (solo 20 s survival, Skilled)  — moving_bridges:67% elevator:100% crusher:100% seesaw:67% piston_panic:100% split_arena:100% clockwork:33% spinning_plank:33% gearbox:100%
+PASS  [Bots] Bots use heavy mode  — 1220 heavy frames
+PASS  [Bots] Bots fight and eliminate each other  — 12 credited KOs, 2 rounds
+PASS  [Bots] Bots target different opponents (not only one player)  — 3 distinct targets
+PASS  [Bots] Bots can eliminate the human player  — 4/4 idle humans knocked out within 45 s
+PASS  [Bots] Human input path can defeat bots without exploits  — 5/8 4-player rounds won vs 3 Casual bots (fair share 25%; pilot uses only arrow/X inputs)
+PASS  [Difficulty] Higher levels survive hazards longer  — avg solo survival (s): L1=8.9 L2=17.9 L3=16.4 L4=24.4 L5=22.1 L6=22.0
+PASS  [Difficulty] Higher levels win more free-for-all rounds  — round wins by level: {"1":0,"2":1,"3":2,"4":4,"5":3,"6":5} (15 rounds)
+PASS  [Difficulty] All six levels have distinct behaviour profiles  — L1: react 20f, horizon 0.8s · L2: react 13f, horizon 1.1s · L3: react 8f, horizon 1.5s · L4: react 5f, horizon 1.8s · L5: react 3f, horizon 2.1s · L6: react 2f, horizon 2.4s
+PASS  [Difficulty] Difficulty never changes physics (same mass/force for all)  — bots use player.input only; Sim applies identical forces to every player
+PASS  [Modes] Arrows: bots charge & fire arrows that hit players  — 50 arrows, 35 hits
+PASS  [Modes] Arrows: projectile has momentum and recoil pushes the shooter back  — arrow speed 42.5 m/s
+PASS  [Modes] Grapple: rope attaches to solid geometry with a physical constraint  — rope length 6.1 m
+PASS  [Modes] Grapple: holding up reels in  — 6.1 → 2.2 m
+PASS  [Modes] Grapple: releasing Z detaches
+PASS  [Modes] Football: bots score goals and goals are counted  — scores {"1":0,"2":1}
+PASS  [Modes] Teams: round ends when only one team remains  — winner team 2
+PASS  [Custom maps] Editor-format maps (rect, circle, concave polygon, motor, path) simulate
+PASS  [Custom maps] Concave polygons are split into convex pieces  — 2 pieces
+
+50/50 passed

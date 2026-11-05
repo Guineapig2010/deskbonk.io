@@ -4,7 +4,7 @@ This file says plainly what has been tested and what hasn't. I wrote and tested 
 
 ## Verified here
 
-**Simulation, maps, bots and modes.** `node tests/run_tests.js` runs the real game code headlessly. The latest results are in `tests/output/report.txt`. It covers:
+**Simulation, maps, bots and modes.** `node tests/run_tests.js` runs the real game code headlessly. Latest full run: **50/50 checks passed** (copy in `docs/test-report.txt`). It covers:
 
 * force-based movement in all four directions, momentum persistence, and rolling
 * heavy mode: about 3.2× mass, reduced acceleration, drains while held, recovers when released, deterministic
@@ -13,7 +13,7 @@ This file says plainly what has been tested and what hasn't. I wrote and tested 
 * all 30 maps: they load, have 8 spawns clear of geometry, their mechanisms (paths, pistons, spinners, motors) move, there are no NaN or physics errors in 8-bot matches, and rounds finish (80 s each)
 * breakable joints break, springs compress, gravity rotates, seesaws tilt, consecutive rounds work
 * bots navigate simple and moving maps, use heavy, fight and eliminate each other, spread their targets, and can eliminate an idle human
-* a "human" driven only through the human input path can beat Casual bots
+* a "human" driven only through the human input path (an Expert-level pilot pressing only the arrow/X keys) won 5 of 8 four-player rounds against 3 Casual bots; the pass bar is beating the 25% fair share
 * difficulty: higher levels survive hazard maps longer and win more free-for-all rounds, and all 6 behaviour profiles are distinct
 * Arrows (shots, hits, recoil), Grapple (rope attaches, reels in, releases), Football (goals counted), Teams (round ends when one team remains)
 * custom (editor-format) maps simulate, and concave polygons decompose
