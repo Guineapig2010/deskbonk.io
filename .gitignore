@@ -7,3 +7,4 @@ DerivedData/
 node_modules/
 tests/output/
 *.zip
+build-lite/
