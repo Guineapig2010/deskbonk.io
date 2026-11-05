@@ -4,6 +4,14 @@
 set -euo pipefail
 cd "$(dirname "$0")"
 
+if ! xcrun --find swiftc >/dev/null 2>&1; then
+  echo "✗ Apple's developer tools aren't installed yet (needed to compile the app)."
+  echo "  1. Run:  xcode-select --install   and click Install in the dialog (takes a few minutes)."
+  echo "  2. When it finishes, run ./build_app.sh again."
+  echo "  Meanwhile you can play in Safari:  open Sources/DesktopBonk/Web/index.html"
+  exit 1
+fi
+
 SRC="Sources/DesktopBonk"
 OUT="build"
 APP="$OUT/DesktopBonk.app"
