@@ -5,6 +5,15 @@ ObjC.import('Cocoa');
 ObjC.import('WebKit');
 
 function run(argv) {
+  try { start(argv); } catch (e) {
+    // show any startup problem in a normal dialog so it can be reported
+    const sa = Application.currentApplication();
+    sa.includeStandardAdditions = true;
+    sa.displayDialog('Desktop Bonk could not start:\n\n' + String(e) + (e && e.line ? ' (line ' + e.line + ')' : ''), { withTitle: 'Desktop Bonk', buttons: ['OK'] });
+  }
+}
+
+function start(argv) {
   const webDir = argv[0];
   const app = $.NSApplication.sharedApplication;
   app.setActivationPolicy($.NSApplicationActivationPolicyAccessory);
