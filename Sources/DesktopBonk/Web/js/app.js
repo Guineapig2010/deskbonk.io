@@ -615,7 +615,18 @@
       b.onclick = () => { onSetting('desktop.size', b.dataset.size); if (App.screen === 'settings') showScreen('settings'); };
     });
     $('#drag').addEventListener('mousedown', (e) => { e.preventDefault(); DB.native.post('dragStart'); });
-    $('#grip').addEventListener('mousedown', (e) => { e.preventDefault(); DB.native.post('resizeStart'); });
+    if (DB.native.jsResize) {
+      // host resizes from page-side pointer tracking (Electron)
+      const grip = $('#grip');
+      let rs = null;
+      grip.addEventListener('pointerdown', (e) => { e.preventDefault(); rs = { x: e.screenX, y: e.screenY, w: window.outerWidth, h: window.outerHeight }; grip.setPointerCapture(e.pointerId); });
+      grip.addEventListener('pointermove', (e) => { if (rs) DB.native.post('resizeTo', { width: rs.w + e.screenX - rs.x, height: rs.h + e.screenY - rs.y }); });
+      const end = () => { if (rs) { rs = null; DB.native.post('resizeEnd'); } };
+      grip.addEventListener('pointerup', end); grip.addEventListener('pointercancel', end);
+    } else {
+      $('#grip').addEventListener('mousedown', (e) => { e.preventDefault(); DB.native.post('resizeStart'); });
+    }
+    if (DB.native.electron) document.body.classList.add('electron');
     // clicking the arena itself gives the game focus (when the window catches the click)
     document.getElementById('game').addEventListener('mousedown', () => { if (!App.focused) requestFocus(); });
     window.addEventListener('keydown', onKeyDown, { capture: true });

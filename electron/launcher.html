@@ -1,0 +1,21 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><style>
+  html, body { margin: 0; background: transparent; overflow: hidden; -webkit-user-select: none; }
+  #ball { position: absolute; left: 5px; top: 5px; width: 36px; height: 36px; border-radius: 50%; background: #ff5a5a;
+    border: 2.5px solid rgba(0,0,0,.75); box-sizing: border-box; cursor: pointer; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,.35); }
+  #ball::after { content: ''; position: absolute; left: 0; right: 0; top: 13px; height: 7px; background: rgba(0,0,0,.25); }
+</style></head>
+<body><div id="ball" title="Desktop Bonk — click to open, drag to move"></div>
+<script>
+  const { ipcRenderer } = require('electron');
+  let start = null, moved = false;
+  const ball = document.getElementById('ball');
+  ball.addEventListener('pointerdown', (e) => { start = { x: e.screenX, y: e.screenY, wx: window.screenX, wy: window.screenY }; moved = false; ball.setPointerCapture(e.pointerId); });
+  ball.addEventListener('pointermove', (e) => {
+    if (!start) return;
+    const dx = e.screenX - start.x, dy = e.screenY - start.y;
+    if (Math.abs(dx) + Math.abs(dy) > 3) moved = true;
+    if (moved) ipcRenderer.send('launcher-move', { x: start.wx + dx, y: start.wy + dy });
+  });
+  ball.addEventListener('pointerup', () => { if (start && !moved) ipcRenderer.send('launcher-open'); start = null; });
+</script></body></html>

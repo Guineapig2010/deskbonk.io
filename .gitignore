@@ -8,3 +8,5 @@ node_modules/
 tests/output/
 *.zip
 build-lite/
+dist/
+node_modules/

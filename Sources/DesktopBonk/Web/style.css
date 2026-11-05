@@ -36,6 +36,7 @@ button.sel { outline: 2px solid var(--accent); outline-offset: -1px; }
 #toolbar .sizes button { padding: 1px 5px; }
 #drag { cursor: grab; padding: 0 4px; font-size: 15px; color: var(--muted); }
 #drag:active { cursor: grabbing; }
+body.electron #drag { -webkit-app-region: drag; }
 #title { font-weight: 800; letter-spacing: .08em; font-size: 10px; color: var(--accent); padding-right: 2px; }
 body.playing #toolbar { opacity: 0.4; }
 body.playing #toolbar:hover { opacity: 1; }

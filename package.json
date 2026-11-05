@@ -1,0 +1,17 @@
+{
+  "name": "desktop-bonk",
+  "productName": "Desktop Bonk",
+  "version": "1.0.0",
+  "description": "Bonk-style physics brawler that floats over your desktop.",
+  "main": "electron/main.js",
+  "private": true,
+  "scripts": {
+    "start": "electron .",
+    "install-app": "node electron/install-app.js",
+    "test": "node tests/run_tests.js quick"
+  },
+  "devDependencies": {
+    "@electron/packager": "18.4.4",
+    "electron": "33.4.11"
+  }
+}

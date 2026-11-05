@@ -11,6 +11,8 @@
   const N = DB.native = {
     isNative,
     version: boot && boot.version ? boot.version : 'web',
+    jsResize: !!(boot && boot.jsResize),
+    electron: !!(boot && boot.electron),
     listeners: [],
     post(type, data) {
       if (!isNative) return false;

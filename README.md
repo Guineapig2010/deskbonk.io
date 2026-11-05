@@ -10,7 +10,24 @@ Circular players, force-based arrow-key movement, a heavy mode on **X**, Box2D r
 
 ---
 
-## Build and run
+## Install (easiest — same as other Electron apps)
+
+You need Node.js (you already have it if `npm` works in Terminal). No Xcode, no developer tools.
+
+1. Unzip, then in Terminal type `cd ` (with a space), drag the unzipped folder into the window, press Enter.
+2. Run, one at a time:
+
+```bash
+npm install
+```
+
+```bash
+npm run install-app
+```
+
+Desktop Bonk is packaged, copied into **Applications** and opened — the arena appears in the bottom-right corner. Next time just open it from Applications or Launchpad. (`npm start` runs it without installing.)
+
+## Build and run (native Swift version, needs Xcode tools)
 
 You need macOS 12 or later and Xcode (or just the command-line tools: `xcode-select --install`).
 
